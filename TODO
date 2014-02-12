@@ -1,0 +1,4 @@
+libYARP_manager pubblica
+-rdynamic
+ACE::sprintf (sprintf da warning on windows)
+Windows errori runtime (virtual machine?)
