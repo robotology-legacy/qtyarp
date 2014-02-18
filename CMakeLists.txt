@@ -23,6 +23,7 @@ find_package(Qt5Xml)
 find_package(Qt5PrintSupport)
 
 find_package(YARP)
+find_package(YARPManager)
 include_directories(${YARP_INCLUDE_DIRS})
 
 add_subdirectory(QtYarpManager)
