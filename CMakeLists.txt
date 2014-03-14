@@ -84,6 +84,9 @@ endif()
 
 
 feature_summary(WHAT PACKAGES_FOUND
-                     PACKAGES_NOT_FOUND
-                     ENABLED_FEATURES
+                     REQUIRED_PACKAGES_NOT_FOUND
+                     RECOMMENDED_PACKAGES_NOT_FOUND
+                     FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+feature_summary(WHAT ENABLED_FEATURES
                      DISABLED_FEATURES)
