@@ -90,3 +90,5 @@ feature_summary(WHAT PACKAGES_FOUND
 
 feature_summary(WHAT ENABLED_FEATURES
                      DISABLED_FEATURES)
+
+include(AddUninstallTarget)
