@@ -62,12 +62,14 @@ if(WITH_QTYARPSCOPE)
     add_subdirectory(QtYARPScope)
 endif()
 
-option(WITH_QTYARPMANAGER "Enable QtYarpManager" ON)
-add_feature_info(QtYarpManager WITH_QTYARPMANAGER "QtYarpManager.")
+option(WITH_QTYARPMANAGER "Enable QtYarpManager" ${YARPManager_FOUND})
 if(WITH_QTYARPMANAGER AND NOT YARPManager_FOUND)
-    message(WARNING "YARP_EXPERIMENTAL_MANAGER_LIB flag must be enabled in YARP for QtYarpManager")
+    message(WARNING "
+YARP_EXPERIMENTAL_MANAGER_LIB flag must be enabled in YARP in order to build QtYarpManager.
+The option \"WITH_QTYARPMANAGER\" will now be disabled.")
     set_property(CACHE WITH_QTYARPMANAGER PROPERTY VALUE OFF)
 endif()
+add_feature_info(QtYarpManager WITH_QTYARPMANAGER "QtYarpManager.")
 if(WITH_QTYARPMANAGER)
     add_subdirectory(QtYarpManager)
 endif()
