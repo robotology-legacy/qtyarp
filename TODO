@@ -1,4 +1,3 @@
-libYARP_manager pubblica
--rdynamic
+-rdynamic (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
 ACE::sprintf (sprintf da warning on windows)
-Windows errori runtime (virtual machine?)
+Windows runtime errors (virtual machine?)
