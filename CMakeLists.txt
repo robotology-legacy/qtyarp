@@ -51,6 +51,16 @@ set_package_properties(YARPManager PROPERTIES TYPE RECOMMENDED)
 
 include_directories(${YARP_INCLUDE_DIRS})
 
+
+if(WIN32)
+  set(PLUGINS_RELATIVE_PATH "..\\${CMAKE_INSTALL_LIBDIR}\\qml\\imports")
+else()
+  set(PLUGINS_RELATIVE_PATH "../${CMAKE_INSTALL_LIBDIR}/qml/imports")
+endif()
+configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h @ONLY)
+include_directories(${CMAKE_BINARY_DIR})
+
+
 option(WITH_QTYARPVIEW "Enable QtYarpViewPlugin and QtYarpView" ON)
 add_feature_info(QtYarpView WITH_QTYARPVIEW "QtYarpViewPlugin and QtYarpView.")
 if(WITH_QTYARPVIEW)
