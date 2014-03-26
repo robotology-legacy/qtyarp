@@ -58,30 +58,30 @@ configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h @ONLY)
 include_directories(${CMAKE_BINARY_DIR})
 
 
-option(WITH_QTYARPVIEW "Enable QtYarpViewPlugin and QtYarpView" ON)
-add_feature_info(QtYarpView WITH_QTYARPVIEW "QtYarpViewPlugin and QtYarpView.")
+option(WITH_QTYARPVIEW "Enable QtYARPViewPlugin and QtYARPView" ON)
+add_feature_info(QtYARPView WITH_QTYARPVIEW "QtYARPViewPlugin and QtYARPView.")
 if(WITH_QTYARPVIEW)
     add_subdirectory(QtYARPViewPlugin)
     add_subdirectory(QtYARPView)
 endif()
 
-option(WITH_QTYARPSCOPE "Enable QtYarpScopePlugin and QtYarpScope" ON)
-add_feature_info(QtYarpScope WITH_QTYARPSCOPE "QtYarpScopePlugin and QtYarpScope.")
+option(WITH_QTYARPSCOPE "Enable QtYARPScopePlugin and QtYARPScope" ON)
+add_feature_info(QtYARPScope WITH_QTYARPSCOPE "QtYARPScopePlugin and QtYARPScope.")
 if(WITH_QTYARPSCOPE)
     add_subdirectory(QtYARPScopePlugin)
     add_subdirectory(QtYARPScope)
 endif()
 
-option(WITH_QTYARPMANAGER "Enable QtYarpManager" ${YARP_HAS_MANAGER_LIB})
+option(WITH_QTYARPMANAGER "Enable QtYARPManager" ${YARP_HAS_MANAGER_LIB})
 if(WITH_QTYARPMANAGER AND NOT YARP_HAS_MANAGER_LIB)
     message(WARNING "
-YARP_EXPERIMENTAL_MANAGER_LIB flag must be enabled in YARP in order to build QtYarpManager.
+YARP_EXPERIMENTAL_MANAGER_LIB flag must be enabled in YARP in order to build QtYARPManager.
 The option \"WITH_QTYARPMANAGER\" will now be disabled.")
     set_property(CACHE WITH_QTYARPMANAGER PROPERTY VALUE OFF)
 endif()
-add_feature_info(QtYarpManager WITH_QTYARPMANAGER "QtYarpManager.")
+add_feature_info(QtYARPManager WITH_QTYARPMANAGER "QtYARPManager.")
 if(WITH_QTYARPMANAGER)
-    add_subdirectory(QtYarpManager)
+    add_subdirectory(QtYARPManager)
 endif()
 
 cmake_dependent_option(WITH_EXAMPLES "Enable Examples" OFF
