@@ -43,10 +43,8 @@ if(Qt5_FOUND)
     set_property(GLOBAL PROPERTY PACKAGES_NOT_FOUND ${_packages_not_found})
 endif()
 
-find_package(YARP 2.3.62)
-find_package(YARPManager 2.3.62)
+find_package(YARP 2.3.62.1)
 set_package_properties(YARP PROPERTIES TYPE REQUIRED)
-set_package_properties(YARPManager PROPERTIES TYPE RECOMMENDED)
 
 include_directories(${YARP_INCLUDE_DIRS})
 
@@ -74,8 +72,8 @@ if(WITH_QTYARPSCOPE)
     add_subdirectory(QtYARPScope)
 endif()
 
-option(WITH_QTYARPMANAGER "Enable QtYarpManager" ${YARPManager_FOUND})
-if(WITH_QTYARPMANAGER AND NOT YARPManager_FOUND)
+option(WITH_QTYARPMANAGER "Enable QtYarpManager" ${YARP_HAS_MANAGER_LIB})
+if(WITH_QTYARPMANAGER AND NOT YARP_HAS_MANAGER_LIB)
     message(WARNING "
 YARP_EXPERIMENTAL_MANAGER_LIB flag must be enabled in YARP in order to build QtYarpManager.
 The option \"WITH_QTYARPMANAGER\" will now be disabled.")
