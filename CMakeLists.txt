@@ -92,12 +92,12 @@ set_package_properties(YARP PROPERTIES TYPE REQUIRED)
 include_directories(${YARP_INCLUDE_DIRS})
 
 
+file(TO_NATIVE_PATH "../${CMAKE_INSTALL_LIBDIR}/qml/imports" PLUGINS_RELATIVE_PATH)
 if(WIN32)
-  set(PLUGINS_RELATIVE_PATH "..\\${CMAKE_INSTALL_LIBDIR}\\qml\\imports")
-else()
-  set(PLUGINS_RELATIVE_PATH "../${CMAKE_INSTALL_LIBDIR}/qml/imports")
+    string(REPLACE "\\" "\\\\" PLUGINS_RELATIVE_PATH "${PLUGINS_RELATIVE_PATH}")
 endif()
-configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h @ONLY)
+configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h ONLY)
+
 include_directories(${CMAKE_BINARY_DIR})
 
 
