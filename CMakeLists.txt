@@ -9,6 +9,11 @@ macro(qtyarp_deprecate_with_cmake_version _version)
     endif()
 endmacro()
 
+qtyarp_deprecate_with_cmake_version(2.8.11)
+if(NOT ${CMAKE_VERSION} VERSION_LESS 2.8.11)
+    cmake_policy(SET CMP0020 NEW)
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(GNUInstallDirs)
