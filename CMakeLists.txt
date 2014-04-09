@@ -101,6 +101,12 @@ configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h ONLY)
 include_directories(${CMAKE_BINARY_DIR})
 
 
+feature_summary(WHAT PACKAGES_FOUND
+                     REQUIRED_PACKAGES_NOT_FOUND
+                     RECOMMENDED_PACKAGES_NOT_FOUND
+                     FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+
 option(WITH_QTYARPVIEW "Enable QtYARPViewPlugin and QtYARPView" ON)
 add_feature_info(QtYARPView WITH_QTYARPVIEW "QtYARPViewPlugin and QtYARPView.")
 if(WITH_QTYARPVIEW)
@@ -136,10 +142,6 @@ endif()
 
 
 
-feature_summary(WHAT PACKAGES_FOUND
-                     REQUIRED_PACKAGES_NOT_FOUND
-                     RECOMMENDED_PACKAGES_NOT_FOUND
-                     FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 feature_summary(WHAT ENABLED_FEATURES
                      DISABLED_FEATURES)
