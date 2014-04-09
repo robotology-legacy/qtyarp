@@ -65,7 +65,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt5 COMPONENTS Core Widgets Gui Quick Qml Multimedia Xml PrintSupport)
+find_package(Qt5 COMPONENTS Core Widgets Gui Quick Qml Multimedia Xml PrintSupport QUIET)
 set_package_properties(Qt5 PROPERTIES TYPE REQUIRED)
 set_package_properties(Qt5Core PROPERTIES TYPE REQUIRED)
 set_package_properties(Qt5Widgets PROPERTIES TYPE REQUIRED)
@@ -86,7 +86,7 @@ if(Qt5_FOUND)
     set_property(GLOBAL PROPERTY PACKAGES_NOT_FOUND ${_packages_not_found})
 endif()
 
-find_package(YARP 2.3.62.1)
+find_package(YARP 2.3.62.1 QUIET)
 set_package_properties(YARP PROPERTIES TYPE REQUIRED)
 
 include_directories(${YARP_INCLUDE_DIRS})
