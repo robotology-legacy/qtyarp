@@ -9,6 +9,28 @@ macro(qtyarp_deprecate_with_cmake_version _version)
     endif()
 endmacro()
 
+macro(qtyarp_qml_plugin _target _path)
+    set_property(TARGET ${_target} APPEND PROPERTY COMPILE_DEFINITIONS QT_PLUGIN)
+    set_target_properties(${_target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_path}
+                                                LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_path}
+                                                ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_path})
+    foreach(config ${CMAKE_CONFIGURATION_TYPES})
+        string(TOUPPER ${config} CONFIG)
+        set_target_properties(${_target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG}}/${_path}
+                                                    LIBRARY_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG}}/${_path}
+                                                    ARCHIVE_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG}}/${_path})
+    endforeach()
+
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/qmldir)
+        add_custom_command(TARGET ${_target}
+                           POST_BUILD
+                           COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/qmldir
+                                   ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_LIBDIR}/${_path}/qmldir)
+    endif()
+endmacro()
+
+
 qtyarp_deprecate_with_cmake_version(2.8.11)
 if(NOT ${CMAKE_VERSION} VERSION_LESS 2.8.11)
     cmake_policy(SET CMP0020 NEW)
@@ -25,9 +47,17 @@ set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
 # Postfix for debug builds
 set(CMAKE_DEBUG_POSTFIX "d")
+
+# Output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+foreach(config ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER ${config} CONFIG)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_BINDIR})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_LIBDIR})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_LIBDIR})
+endforeach()
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
