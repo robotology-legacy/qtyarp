@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(QtYARP CXX)
 
+set(CMAKE_WARN_DEPRECATED TRUE)
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(GNUInstallDirs)
