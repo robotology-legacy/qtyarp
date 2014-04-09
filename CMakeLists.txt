@@ -3,6 +3,12 @@ project(QtYARP CXX)
 
 set(CMAKE_WARN_DEPRECATED TRUE)
 
+macro(qtyarp_deprecate_with_cmake_version _version)
+    if(NOT ${CMAKE_MINIMUM_REQUIRED_VERSION} VERSION_LESS ${_version})
+        message(AUTHOR_WARNING "CMAKE_MINIMUM_REQUIRED_VERSION = ${CMAKE_MINIMUM_REQUIRED_VERSION}. You can remove this check.")
+    endif()
+endmacro()
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(GNUInstallDirs)
