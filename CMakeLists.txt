@@ -1,6 +1,41 @@
 cmake_minimum_required(VERSION 2.8.9)
 project(QtYARP CXX)
 
+set(CMAKE_WARN_DEPRECATED TRUE)
+
+macro(qtyarp_deprecate_with_cmake_version _version)
+    if(NOT ${CMAKE_MINIMUM_REQUIRED_VERSION} VERSION_LESS ${_version})
+        message(AUTHOR_WARNING "CMAKE_MINIMUM_REQUIRED_VERSION = ${CMAKE_MINIMUM_REQUIRED_VERSION}. You can remove this check.")
+    endif()
+endmacro()
+
+macro(qtyarp_qml_plugin _target _path)
+    set_property(TARGET ${_target} APPEND PROPERTY COMPILE_DEFINITIONS QT_PLUGIN)
+    set_target_properties(${_target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_path}
+                                                LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_path}
+                                                ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_path})
+    foreach(config ${CMAKE_CONFIGURATION_TYPES})
+        string(TOUPPER ${config} CONFIG)
+        set_target_properties(${_target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG}}/${_path}
+                                                    LIBRARY_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG}}/${_path}
+                                                    ARCHIVE_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG}}/${_path})
+    endforeach()
+
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/qmldir)
+        add_custom_command(TARGET ${_target}
+                           POST_BUILD
+                           COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/qmldir
+                                   ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_LIBDIR}/${_path}/qmldir)
+    endif()
+endmacro()
+
+
+qtyarp_deprecate_with_cmake_version(2.8.11)
+if(NOT ${CMAKE_VERSION} VERSION_LESS 2.8.11)
+    cmake_policy(SET CMP0020 NEW)
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(GNUInstallDirs)
@@ -12,9 +47,17 @@ set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
 # Postfix for debug builds
 set(CMAKE_DEBUG_POSTFIX "d")
+
+# Output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+foreach(config ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER ${config} CONFIG)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_BINDIR})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_LIBDIR})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${CMAKE_INSTALL_LIBDIR})
+endforeach()
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -22,7 +65,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt5 COMPONENTS Core Widgets Gui Quick Qml Multimedia Xml PrintSupport)
+find_package(Qt5 COMPONENTS Core Widgets Gui Quick Qml Multimedia Xml PrintSupport QUIET)
 set_package_properties(Qt5 PROPERTIES TYPE REQUIRED)
 set_package_properties(Qt5Core PROPERTIES TYPE REQUIRED)
 set_package_properties(Qt5Widgets PROPERTIES TYPE REQUIRED)
@@ -43,19 +86,25 @@ if(Qt5_FOUND)
     set_property(GLOBAL PROPERTY PACKAGES_NOT_FOUND ${_packages_not_found})
 endif()
 
-find_package(YARP 2.3.62.1)
+find_package(YARP 2.3.62.1 QUIET)
 set_package_properties(YARP PROPERTIES TYPE REQUIRED)
 
 include_directories(${YARP_INCLUDE_DIRS})
 
 
+file(TO_NATIVE_PATH "../${CMAKE_INSTALL_LIBDIR}/qml/imports" PLUGINS_RELATIVE_PATH)
 if(WIN32)
-  set(PLUGINS_RELATIVE_PATH "..\\${CMAKE_INSTALL_LIBDIR}\\qml\\imports")
-else()
-  set(PLUGINS_RELATIVE_PATH "../${CMAKE_INSTALL_LIBDIR}/qml/imports")
+    string(REPLACE "\\" "\\\\" PLUGINS_RELATIVE_PATH "${PLUGINS_RELATIVE_PATH}")
 endif()
-configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h @ONLY)
+configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h ONLY)
+
 include_directories(${CMAKE_BINARY_DIR})
+
+
+feature_summary(WHAT PACKAGES_FOUND
+                     REQUIRED_PACKAGES_NOT_FOUND
+                     RECOMMENDED_PACKAGES_NOT_FOUND
+                     FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 
 option(WITH_QTYARPVIEW "Enable QtYARPViewPlugin and QtYARPView" ON)
@@ -93,10 +142,6 @@ endif()
 
 
 
-feature_summary(WHAT PACKAGES_FOUND
-                     REQUIRED_PACKAGES_NOT_FOUND
-                     RECOMMENDED_PACKAGES_NOT_FOUND
-                     FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 feature_summary(WHAT ENABLED_FEATURES
                      DISABLED_FEATURES)
