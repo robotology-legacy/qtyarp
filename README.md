@@ -86,3 +86,5 @@ make
 If you installed Qt5 from the [Qt Project website][qt-project], you will
 need to add the `CMAKE_PREFIX_PATH` environment variable to find Qt5
 cmake modules.
+
+Alternatively, you can set up the environment variable `Qt5_DIR` pointing to the location where cmake modules are.
