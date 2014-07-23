@@ -57,8 +57,12 @@ On Debian testing you need to install the packages:
    - qtdeclarative5-controls-plugin
 
 Please note that since the Qt5 Debian packaging is quite new, older
-releases do not have these packages and on some Ubuntu releases the name
-of the packages could be slightly different.
+releases do not have these packages and on some Ubuntu releases the name of the packages could be slightly different.
+
+##### Windows #####
+On Windows systems, to build Qt packages downloaded with __OpenGL__ features, you have to make the environment variable `CMAKE_PREFIX_PATH` point to Windows SDK location. For example, for a Windows 7 platform, the following may hold:
+
+`CMAKE_PREFIX_PATH=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A`
 
 
 ### YARP 2.3.62.1 (master) ###
@@ -86,3 +90,5 @@ make
 If you installed Qt5 from the [Qt Project website][qt-project], you will
 need to add the `CMAKE_PREFIX_PATH` environment variable to find Qt5
 cmake modules.
+
+Alternatively, you can set up the environment variable `Qt5_DIR` pointing to the location where Qt5 cmake modules are.
