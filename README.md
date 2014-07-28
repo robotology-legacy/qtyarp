@@ -68,12 +68,12 @@ Alternatively, you can set up the environment variable `Qt5_DIR` pointing to the
 
 ##### Windows #####
 Download and install precompiled binaries from the
-[Qt Project website](http://qt-project.org/downloads) 
+[Qt Project website](http://qt-project.org/downloads).
 
 Make sure you define the following environment variables:
 
 `
-Qt5_DIR: location where cmake modules are, e.g. C:\Qt\5.3\msvc2010_opengl
+Qt5_DIR= location where cmake modules are, e.g. C:\Qt\5.3\msvc2010_opengl
 `
 
 You need also to ensure Qt is in the system path, i.e. check that your PATH includes qt's binaries and DLLs:
