@@ -50,11 +50,11 @@ On Debian testing you need to install the packages:
    - qtbase5-dev
    - qtdeclarative5-dev
    - qtmultimedia5-dev
-   - qtdeclarative5-qtquick2-plugin
-   - qtdeclarative5-window-plugin
-   - qtdeclarative5-dialogs-plugin
-   - qtdeclarative5-qtmultimedia-plugin
-   - qtdeclarative5-controls-plugin
+   - qml-module-qtquick2
+   - qml-module-qtquick-window2
+   - qml-module-qtmultimedia
+   - qml-module-qtquick-dialogs
+   - qml-module-qtquick-controls
 
 Please note that since the Qt5 Debian packaging is quite new, older
 releases do not have these packages and on some Ubuntu releases the name of the packages could be slightly different.
