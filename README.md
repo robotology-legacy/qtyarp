@@ -50,20 +50,41 @@ On Debian testing you need to install the packages:
    - qtbase5-dev
    - qtdeclarative5-dev
    - qtmultimedia5-dev
-   - qtdeclarative5-qtquick2-plugin
-   - qtdeclarative5-window-plugin
-   - qtdeclarative5-dialogs-plugin
-   - qtdeclarative5-qtmultimedia-plugin
-   - qtdeclarative5-controls-plugin
+   - qml-module-qtquick2
+   - qml-module-qtquick-window2
+   - qml-module-qtmultimedia
+   - qml-module-qtquick-dialogs
+   - qml-module-qtquick-controls
 
 Please note that since the Qt5 Debian packaging is quite new, older
-releases do not have these packages and on some Ubuntu releases the name of the packages could be slightly different.
+releases do not have these packages and on some Ubuntu releases the name of the
+packages could be slightly different.
+
+If you installed Qt5 from the [Qt Project website][qt-project], you will
+need to add the `CMAKE_PREFIX_PATH` environment variable to find Qt5
+cmake modules.
+
+Alternatively, you can set up the environment variable `Qt5_DIR` pointing to the location where Qt5 cmake modules are.
 
 ##### Windows #####
-On Windows systems, to build Qt packages downloaded with __OpenGL__ features, you have to make the environment variable `CMAKE_PREFIX_PATH` point to Windows SDK location. For example, for a Windows 7 platform, the following may hold:
+Download and install precompiled binaries from the
+[Qt Project website](http://qt-project.org/downloads).
+
+Make sure you define the following environment variables:
+
+`
+Qt5_DIR= location where cmake modules are, e.g. C:\Qt\5.3\msvc2010_opengl
+`
+
+You need also to ensure Qt is in the system path, i.e. check that your PATH includes Qt's binaries and DLLs:
+
+`
+PATH= ... ... ;C:\Qt\5.3\msvc2010_opengl\bin
+`
+
+In some configurations we found that you have to make the environment variable `CMAKE_PREFIX_PATH` point to Windows SDK location. For example, for a Windows 7 platform, the following may hold:
 
 `CMAKE_PREFIX_PATH=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A`
-
 
 ### YARP 2.3.62.1 (master) ###
 
@@ -79,16 +100,9 @@ and enable the `YARP_EXPERIMENTAL_MANAGER_LIB` flag in CMake.
 
 Build like a standard CMake project:
 
-
 ```
 mkdir build
 cd build
 cmake ..
 make
 ```
-
-If you installed Qt5 from the [Qt Project website][qt-project], you will
-need to add the `CMAKE_PREFIX_PATH` environment variable to find Qt5
-cmake modules.
-
-Alternatively, you can set up the environment variable `Qt5_DIR` pointing to the location where Qt5 cmake modules are.
