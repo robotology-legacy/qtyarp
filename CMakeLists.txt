@@ -121,6 +121,13 @@ if(WITH_QTYARPSCOPE)
     add_subdirectory(QtYARPScope)
 endif()
 
+
+option(WITH_QTYARPLOGGER "Enable QtYARPLogger" ON)
+add_feature_info(QtYARPLogger WITH_QTYARPLOGGER "QtYARPLogger")
+if(WITH_QTYARPLOGGER)
+    add_subdirectory(QtYARPLogger)
+endif()
+
 option(WITH_QTYARPMANAGER "Enable QtYARPManager" ${YARP_HAS_MANAGER_LIB})
 if(WITH_QTYARPMANAGER AND NOT YARP_HAS_MANAGER_LIB)
     message(WARNING "
