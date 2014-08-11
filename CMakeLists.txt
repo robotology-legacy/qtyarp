@@ -122,7 +122,7 @@ if(WITH_QTYARPSCOPE)
 endif()
 
 
-option(WITH_QTYARPLOGGER "Enable QtYARPLogger" ON)
+option(WITH_QTYARPLOGGER "Enable QtYARPLogger" OFF)
 add_feature_info(QtYARPLogger WITH_QTYARPLOGGER "QtYARPLogger")
 if(WITH_QTYARPLOGGER)
     add_subdirectory(QtYARPLogger)
