@@ -61,10 +61,27 @@ releases do not have these packages and on some Ubuntu releases the name of the
 packages could be slightly different.
 
 If you installed Qt5 from the [Qt Project website][qt-project], you will
-need to add the `CMAKE_PREFIX_PATH` environment variable to find Qt5
+need to set up the environment variable `Qt5_DIR` pointing to the location where Qt5 cmake modules are, e.g. for qt 5.3:
+
+`
+export Qt5_DIR=path_to_Qt/5.3/gcc_64/lib/cmake/Qt5/
+`
+
+Alternatively you can add the `CMAKE_PREFIX_PATH` environment variable to find Qt5
 cmake modules.
 
-Alternatively, you can set up the environment variable `Qt5_DIR` pointing to the location where Qt5 cmake modules are.
+You may get this error while running cmake:
+
+`
+The imported target "Qt5::Gui" references the file "Qt5Gui_EGL_LIBRARY-NOTFOUND"
+`
+
+This is due to a problem with the installation script (check: http://qt-project.org/forums/viewthread/44605). 
+A workaround is to install libegl1-mesa-dev:
+
+`
+apt-get install libegl1-mesa-dev
+`
 
 ##### Windows #####
 Download and install precompiled binaries from the
