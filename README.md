@@ -70,18 +70,15 @@ export Qt5_DIR=path_to_Qt/5.3/gcc_64/lib/cmake/Qt5/
 Alternatively you can add the `CMAKE_PREFIX_PATH` environment variable to find Qt5
 cmake modules.
 
-You may get this error while running cmake:
+In some versions of qt5 you may get this error while running cmake:
 
 `
 The imported target "Qt5::Gui" references the file "Qt5Gui_EGL_LIBRARY-NOTFOUND"
 `
 
-This is due to a problem with the installation script (check: http://qt-project.org/forums/viewthread/44605). 
-A workaround is to install libegl1-mesa-dev:
+A workaround is reported [here](https://github.com/robotology-playground/qtyarp/issues/32).
 
-`
-apt-get install libegl1-mesa-dev
-`
+
 
 ##### Windows #####
 Download and install precompiled binaries from the
