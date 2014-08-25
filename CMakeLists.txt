@@ -13,12 +13,12 @@ macro(qtyarp_qml_plugin _target _path)
     set_property(TARGET ${_target} APPEND PROPERTY COMPILE_DEFINITIONS QT_PLUGIN)
     set_target_properties(${_target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${_path}
                                                 LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_path}
-                                                ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${_path})
+                                                ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${_path})
     foreach(config ${CMAKE_CONFIGURATION_TYPES})
         string(TOUPPER ${config} CONFIG)
         set_target_properties(${_target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_${CONFIG}}/${_path}
                                                     LIBRARY_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG}}/${_path}
-                                                    ARCHIVE_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONFIG}}/${_path})
+                                                    ARCHIVE_OUTPUT_DIRECTORY_${CONFIG} ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CONFIG}}/${_path})
     endforeach()
 
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/qmldir)
