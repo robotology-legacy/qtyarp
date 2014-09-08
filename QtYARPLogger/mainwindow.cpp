@@ -185,13 +185,14 @@ void MainWindow::on_enableLogTab(int model_row)
 
 void MainWindow::on_enableLogTab_action()
 {
-    QVariant qvar=qobject_cast<QAction*>(sender())->property("model_row");
-    if (qvar.isValid()==false)
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
     {
         system_message->addMessage("on_clearLogTab_action error",MESSAGE_LEVEL_ERROR);
         return;
     }
-    int model_row = qvar.toInt();
     on_enableLogTab(model_row);
 }
 
@@ -212,13 +213,14 @@ void MainWindow::on_clearLogTab(int model_row)
 
 void MainWindow::on_clearLogTab_action()
 {
-    QVariant qvar=qobject_cast<QAction*>(sender())->property("model_row");
-    if (qvar.isValid()==false)
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
     {
         system_message->addMessage("on_clearLogTab_action error",MESSAGE_LEVEL_ERROR);
         return;
     }
-    int model_row = qvar.toInt();
     on_clearLogTab(model_row);
 }
 
@@ -244,36 +246,42 @@ void MainWindow::on_saveLogTab(int model_row)
 
 void MainWindow::on_saveLogTab_action()
 {
-    QVariant qvar=qobject_cast<QAction*>(sender())->property("model_row");
-    if (qvar.isValid()==false)
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
     {
-        system_message->addMessage("on_clearLogTab_action error",MESSAGE_LEVEL_ERROR);
+        system_message->addMessage("on_saveLogTab_action error",MESSAGE_LEVEL_ERROR);
         return;
     }
-    int model_row = qvar.toInt();
     on_saveLogTab(model_row);
 }
 
 void MainWindow::on_resetCountersLogTab_action()
 {
-    QVariant qvar=qobject_cast<QAction*>(sender())->property("model_row");
-    if (qvar.isValid()==false)
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
     {
         system_message->addMessage("on_resetCountersLogTab_action error",MESSAGE_LEVEL_ERROR);
         return;
     }
-    int model_row = qvar.toInt();
     on_resetCountersLogTab(model_row);
 }
 
 void MainWindow::ctxMenu(const QPoint &pos)
 {
-    QModelIndex index = ui->yarprunTreeView->indexAt(pos);
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
     int model_row=index.row();
-    if (model_row==-1) return;
-
-    std::string portName = model_yarprunports->item(model_row,1)->text().toStdString();
-    bool log_enabled = theLogger->get_log_enable_by_port_complete(portName);
+    if (model_row==-1)
+    {
+        system_message->addMessage("ctxMenu error",MESSAGE_LEVEL_ERROR);
+        return;
+    }
+    std::string logname = model_yarprunports->item(model_row,1)->text().toStdString();
+    bool log_enabled = theLogger->get_log_enable_by_port_complete(logname);
 
     QMenu *menu = new QMenu;
     QAction *act1 = menu->addAction(tr("Clear current log"), this, SLOT(on_clearLogTab_action()));
@@ -285,10 +293,6 @@ void MainWindow::ctxMenu(const QPoint &pos)
        {act3 = menu->addAction(tr("Enable current log"), this, SLOT(on_enableLogTab_action()));}
     QAction *act4 = menu->addAction(tr("Reset errors/warning counters"), this, SLOT(on_resetCountersLogTab_action()));
 
-    act1->setProperty("model_row", model_row);
-    act2->setProperty("model_row", model_row);
-    act3->setProperty("model_row", model_row);
-    act4->setProperty("model_row", model_row);
     menu->exec(ui->yarprunTreeView->mapToGlobal(pos));
 }
 
@@ -631,36 +635,52 @@ void MainWindow::on_actionClear_triggered()
 
 void MainWindow::on_actionClear_current_log_triggered()
 {
-    int row = selection_yarprunports->currentIndex().row();
-    if (row>=0)
-        on_clearLogTab(row);
-    else
-        system_message->addMessage("Invalid log selected", MESSAGE_LEVEL_ERROR);
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
+    {
+        system_message->addMessage("Invalid log selected",MESSAGE_LEVEL_ERROR);
+        return;
+    }
+    on_clearLogTab(model_row);
 }
 
 void MainWindow::on_actionExport_current_log_to_text_file_triggered()
 {
-    int row = selection_yarprunports->currentIndex().row();
-    if (row>=0)
-        on_saveLogTab(row);
-    else
-        system_message->addMessage("Invalid log selected", MESSAGE_LEVEL_ERROR);
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
+    {
+        system_message->addMessage("Invalid log selected",MESSAGE_LEVEL_ERROR);
+        return;
+    }
+    on_saveLogTab(model_row);
 }
 
 void MainWindow::on_actionDisable_current_log_triggered()
 {
-    int row = selection_yarprunports->currentIndex().row();
-    if (row>=0)
-        on_enableLogTab(row);
-    else
-        system_message->addMessage("Invalid log selected", MESSAGE_LEVEL_ERROR);
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
+    {
+        system_message->addMessage("Invalid log selected",MESSAGE_LEVEL_ERROR);
+        return;
+    }
+    on_enableLogTab(model_row);
 }
 
 void MainWindow::on_actionReset_current_log_error_warning_counters_triggered()
 {
-    int row = selection_yarprunports->currentIndex().row();
-    if (row>=0)
-        on_resetCountersLogTab(row);
-    else
-        system_message->addMessage("Invalid log selected", MESSAGE_LEVEL_ERROR);
+    QModelIndex pre_index = ui->yarprunTreeView->selectionModel()->currentIndex();
+    QModelIndex index = proxyModel->mapToSource(pre_index);
+    int model_row=index.row();
+    if (model_row==-1)
+    {
+        system_message->addMessage("Invalid log selected",MESSAGE_LEVEL_ERROR);
+        return;
+    }
+    on_resetCountersLogTab(model_row);
 }
