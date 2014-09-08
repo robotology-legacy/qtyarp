@@ -380,9 +380,15 @@ void MainWindow::on_logtabs_tabCloseRequested(int index)
     delete ui->logtabs->widget(index);
 }
 
-void MainWindow::on_yarprunTreeView_doubleClicked(const QModelIndex &index)
+void MainWindow::on_yarprunTreeView_doubleClicked(const QModelIndex &pre_index)
 {
+    QModelIndex index = proxyModel->mapToSource(pre_index);
     int model_row=index.row();
+    if (model_row==-1)
+    {
+        system_message->addMessage("Invalid log selected",MESSAGE_LEVEL_ERROR);
+        return;
+    }
     QString tabname = model_yarprunports->item(model_row,1)->text();
  
     int exists = -1;
