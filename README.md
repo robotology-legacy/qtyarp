@@ -1,6 +1,20 @@
 QtYARP
 ======
 
+
+WARNING
+=======
+
+QtYARP was merged into YARP, you can now install it from the
+[main YARP repository](https://github.com/robotology/yarp)
+
+
+
+
+OLD README
+==========
+
+
 QtYARP is a porting of YARP Gtk/GtkMM GUIs to Qt5.
 
  - QtYARPView (porting of yarpview)

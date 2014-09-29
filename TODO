@@ -1,3 +1,0 @@
--rdynamic (CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-ACE::sprintf (sprintf da warning on windows)
-Windows runtime errors (virtual machine?)
